@@ -1,0 +1,37 @@
+// Este arquivo define o "contrato" de comunicação externa padronizada de dados entre cliente e servidor
+// Em Sistemas Distribuídos, isso é importante porque cliente e servidor precisam concordar exatamente sobre o formato da mensagem
+// Protobuf é uma forma de transformar dados (como um objeto Python) em bytes para enviar pela rede, e depois transformar esses bytes de volta em dados
+
+// Versão do ProtoBuf
+syntax = "proto3";
+
+// Message: estrutura que define o formato dos dados que serão transmitidos na comumicação entre cliente e servidor
+
+// Request: representa a requisição enviada pelo cliente ao servidor
+// Campos:
+// - command: operação desejada
+// - filenam: nome do arquivo alvo, quando necessário
+// - data: conteúdo binário do arquivo, usado no upload
+message Request {
+  string command = 1; // upload, download, list, delete
+  string filename = 2; // nome do arquivo
+  bytes data = 3; // conteúdo do arquivo (binário)
+}
+
+
+// Response: representa a resposta enviada pelo servidor ao cliente
+// Campos:
+// - status: "OK" ou "ERROR"
+// - message: mensagem textual explicando o resultado
+// - data: conteúdo do arquivo, usado no download
+// - files: lista de nomes de arquivos, usada no list (repeated string representa uma colução de valores no ProtoBuf, equivalente a uma lista)
+message Response {
+  string status = 1;
+  string message = 2;
+  bytes data = 3;
+  repeated string files = 4;
+}
+
+// Uma vez criado o dfs.proto, executamos no Prompt de Comando (CMD) o comando abaixo:
+//          python -m grpc_tools.protoc -I. --python_out=. dfs.proto
+// Isso irá criar o dfs_pb2.py, arquivo que contém classes Python equivalentes às mensagens, com métodos de serialização e desserialização
