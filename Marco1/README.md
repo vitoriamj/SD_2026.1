@@ -121,9 +121,9 @@ Observação: os arquivos Python importam `dfs_pb2.py`. Por isso, o arquivo `.pr
 Coloque os arquivos principais na mesma pasta:
 
 ```bash
-client_commented.py
-server_commented.py
-dfs_commented.proto
+client.py
+server.py
+dfs.proto
 ```
 
 ### 2. Instalar dependências
