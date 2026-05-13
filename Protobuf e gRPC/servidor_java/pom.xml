@@ -4,6 +4,9 @@
 
   O Maven baixa o compilador Protobuf e o plugin gRPC Java automaticamente.
   Depois disso, ele gera as classes Java a partir do arquivo src/main/proto/hello.proto.
+
+  O pom.xml é o arquivo de configuração do Maven, que é o gerenciador de dependências e de build do mundo Java.
+  Pense nele como um requirements.txt mais sofisticado.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,6 +18,10 @@
   <artifactId>servidor-hello</artifactId>
   <version>1.0.0</version>
 
+  <!--
+    Fixa as versões usadas das dependências.
+    Garante que todas as dependências do projeto usem as mesmas versões do gRPC e do Protobuf, evitando conflitos de versão.
+  -->
   <properties>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
@@ -25,18 +32,27 @@
   </properties>
 
   <dependencies>
+    <!--
+      Servidor HTTP/2 baseado em Netty, que é a implementação de referência do gRPC Java.
+    -->
     <dependency>
       <groupId>io.grpc</groupId>
       <artifactId>grpc-netty-shaded</artifactId>
       <version>${grpc.version}</version>
     </dependency>
 
+    <!--
+      Ponte entre o gRPC e o Protobuf, usada para gerar as classes Java a partir dos arquivos .proto.
+    -->
     <dependency>
       <groupId>io.grpc</groupId>
       <artifactId>grpc-protobuf</artifactId>
       <version>${grpc.version}</version>
     </dependency>
 
+    <!--
+      Contém as classes base que o servidor estende, como HelloServiceImplBase, e as classes de stub usadas para chamar o servidor.
+    -->
     <dependency>
       <groupId>io.grpc</groupId>
       <artifactId>grpc-stub</artifactId>

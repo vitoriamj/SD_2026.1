@@ -6,22 +6,30 @@ syntax = "proto3";
   Este arquivo é o ponto comum entre cliente e servidor.
   O servidor Java e o cliente Python não compartilham código-fonte entre si.
   Eles compartilham apenas este contrato.
+
+  O sufixo v1 é uma boa prática: se um dia o contrato precisar mudar de um jeito que não dá para manter compatibilidade, cria-se um hello.v2 em paralelo, em vez de quebrar quem já usa o v1.
 */
-package hello.v1;
+package hello.v1
 
 /*
   Opções usadas pelo gerador Java.
   Elas definem o pacote das classes geradas a partir deste arquivo.
+  Para Python, essas linhas são ignoradas.
 */
-option java_multiple_files = true;
-option java_package = "br.ufg.hello";
-option java_outer_classname = "HelloProto";
+option java_multiple_files = true;  // Pede para cada mensagem virar um arquivo .java separado, em vez de tudo dentro de uma classe gigante.
+option java_package = "br.ufg.hello"; // Diz qual pacote Java essas classes devem ter, e por isso o servidor está em br.ufg.hello.
+option java_outer_classname = "HelloProto"; // Nome de uma classe extra que envolve os enums e algumas constantes do arquivo.
 
 /*
   Serviço gRPC.
 
   Um serviço representa um conjunto de métodos remotos.
   Aqui temos apenas um método, SayHello, para manter a demonstração simples.
+  
+  Declara que existe um serviço chamado HelloService, que oferece uma operação remota (RPC) chamada SayHello.
+  Essa operação recebe um HelloRequest e devolve um HelloResponse.
+  É a partir desse bloco que o protoc vai gerar o skeleton da classe de servidor em Java e o stub em Python.
+  Sem esse bloco, o Protobuf descreveria só dados, sem operações.
 */
 service HelloService {
   /*
@@ -35,8 +43,11 @@ service HelloService {
   Mensagem enviada pelo cliente.
 
   O campo name tem número 1.
-  Esse número faz parte do contrato binário do Protobuf e não deve ser reutilizado
-  com outro significado em versões futuras.
+  Esse número faz parte do contrato binário do Protobuf e não deve ser reutilizado com outro significado em versões futuras.
+  
+  Esse número é o que viaja pela rede para identificar o campo, e por isso ele faz parte do contrato.
+  Trocar o nome name por nome não quebra a compatibilidade binária, porque o que está na rede é o número.
+  Trocar o 1 por 2, isso sim quebra tudo.
 */
 message HelloRequest {
   string name = 1;
@@ -44,6 +55,8 @@ message HelloRequest {
 
 /*
   Mensagem retornada pelo servidor.
+
+  O 1 da HelloRequest e o 1 da HelloResponse não se confundem, porque pertencem a mensagens diferentes.
 */
 message HelloResponse {
   string message = 1;
