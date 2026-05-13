@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+/*
+  Contrato Protobuf do seminário.
+
+  Este arquivo é o ponto comum entre cliente e servidor.
+  O servidor Java e o cliente Python não compartilham código-fonte entre si.
+  Eles compartilham apenas este contrato.
+*/
+package hello.v1;
+
+/*
+  Opções usadas pelo gerador Java.
+  Elas definem o pacote das classes geradas a partir deste arquivo.
+*/
+option java_multiple_files = true;
+option java_package = "br.ufg.hello";
+option java_outer_classname = "HelloProto";
+
+/*
+  Serviço gRPC.
+
+  Um serviço representa um conjunto de métodos remotos.
+  Aqui temos apenas um método, SayHello, para manter a demonstração simples.
+*/
+service HelloService {
+  /*
+    RPC unary: o cliente envia uma mensagem e recebe uma resposta.
+    É o tipo mais simples de comunicação no gRPC.
+  */
+  rpc SayHello (HelloRequest) returns (HelloResponse);
+}
+
+/*
+  Mensagem enviada pelo cliente.
+
+  O campo name tem número 1.
+  Esse número faz parte do contrato binário do Protobuf e não deve ser reutilizado
+  com outro significado em versões futuras.
+*/
+message HelloRequest {
+  string name = 1;
+}
+
+/*
+  Mensagem retornada pelo servidor.
+*/
+message HelloResponse {
+  string message = 1;
+}
