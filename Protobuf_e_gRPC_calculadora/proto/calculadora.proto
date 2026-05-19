@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package calculadora.v1;
+
+option java_multiple_files = true;
+option java_package = "br.ufg.calculadora";
+option java_outer_classname = "CalculadoraProto";
+
+service Calculadora {
+  rpc Somar (OperacaoRequest) returns (OperacaoResponse);
+  rpc Subtrair (OperacaoRequest) returns (OperacaoResponse);
+  rpc Multiplicar (OperacaoRequest) returns (OperacaoResponse);
+  rpc Dividir (OperacaoRequest) returns (OperacaoResponse);
+  rpc Potencia (OperacaoRequest) returns (OperacaoResponse);
+  rpc Modulo (OperacaoRequest) returns (OperacaoResponse);
+  rpc RaizQuadrada (OperacaoRequest) returns (OperacaoResponse);
+}
+
+message OperacaoRequest {
+  double a = 1;
+  double b = 2;
+}
+
+message OperacaoResponse {
+  double resultado = 1;
+  string mensagem = 2;
+  bool erro = 3;
+}
